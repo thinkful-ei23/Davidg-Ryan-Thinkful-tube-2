@@ -28,8 +28,8 @@ const BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
 const fetchVideos = function(searchTerm, callback) {
 	const query = {
 		maxResults: 5,
-		key: AIzaSyAUo-N3cPKJEk1pEEjFn2QBNS5CKCbLcHE,
-		part: snippet,
+		key: 'AIzaSyAUo-N3cPKJEk1pEEjFn2QBNS5CKCbLcHE',
+		part: 'snippet',
 		q: searchTerm
 	};
 	$.getJSON(BASE_URL, query, response => callback(response) );
@@ -47,8 +47,8 @@ const decorateResponse = function(response) {
 const responseData = response.items.map(function(item){
  return {
    id: item.id.videoId,
-   title: item.snipper.title,
-   thumbnail: item.snippet.thumbnails.default.url
+   title: item.snippet.title,
+   thumbnail: item.snippet.thumbnails.medium.url
  };
 });
 return responseData;
@@ -60,10 +60,19 @@ return responseData;
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
 
-const generate videoItemElement = function(video) {
-	return `<img src = "${video.thumbnail}">`;
+const videoItemElement = function(video) {
+//	return `<img src = "${video.thumbnail}">`;
+
+ return `    
+<a href='https://www.youtube.com/watch?v=${video.id}'>
+<h2>${video.title}</h2>
+<img src='${video.thumbnail}'>
+`;
+
+
+
 };
-const generate generateVideoItemHtml = function(video) {
+const generateVideoItemHtml = function(video) {
 	 const items = video.map((item) => videoItemElement(item));
 	return items;
 };
@@ -83,9 +92,9 @@ const addVideosToStore = function(videos) {
 // 3. Add your array of DOM elements to the appropriate DOM element
 // TEST IT!
 const render = function() {
-    const QueryItemsString = generateVideoItemHtml(items);
+    const QueryItemsString = store.videos.map(v => videoItemElement(v));
   
-    $('.results').html(QueryItemString);
+    $('.results').html(QueryItemsString);
 };
 
 // TASK:
@@ -100,7 +109,7 @@ const render = function() {
 //   g) Inside the callback, run the `render` function 
 // TEST IT!
 const handleFormSubmit = function() {
-	$('#search-term').submit(function(event) {
+	$('#search-form').submit(function(event) {
 		console.log('form submit running');
 		event.preventDefault();
 		const queryTerm = $('#search-term').val();
@@ -114,6 +123,8 @@ const handleFormSubmit = function() {
 };
 
 // When DOM is ready:
-$(functioun () {
+$(function () {
 	handleFormSubmit();
+// TASK:
 });
+

@@ -46,11 +46,11 @@ const fetchVideos = function(searchTerm, callback) {
 const decorateResponse = function(response) {
 const responseData = response.items.map(function(item){
  return {
-   id: item.id,
-   title: item.title,
-   thumbnail: item.thumbnail.default
+   id: item.id.videoId,
+   title: item.snipper.title,
+   thumbnail: item.snippet.thumbnails.default.url
  };
-};
+});
 return responseData;
 };	
 
@@ -61,11 +61,11 @@ return responseData;
 // TEST IT!
 
 const generate videoItemElement = function(video) {
-	return `<img src = /*video thumb*/>`;
+	return `<img src = "${video.thumbnail}">`;
 };
 const generate generateVideoItemHtml = function(video) {
 	 const items = video.map((item) => videoItemElement(item));
-	return items.join('');
+	return items;
 };
 
 // TASK:
@@ -73,7 +73,8 @@ const generate generateVideoItemHtml = function(video) {
 // objects and sets the array as the value held in store.videos
 // TEST IT!
 const addVideosToStore = function(videos) {
-	
+	store.videos=videos;
+
 };
 
 // TASK:
@@ -100,6 +101,7 @@ const render = function() {
 // TEST IT!
 const handleFormSubmit = function() {
 	$('#search-term').submit(function(event) {
+		console.log('form submit running');
 		event.preventDefault();
 		const queryTerm = $('#search-term').val();
 		$('#search-term').val('');
@@ -114,5 +116,4 @@ const handleFormSubmit = function() {
 // When DOM is ready:
 $(functioun () {
 	handleFormSubmit();
-// TASK:
 });

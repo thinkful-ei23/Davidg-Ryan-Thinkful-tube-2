@@ -18,7 +18,7 @@ const store = {
 
 // TASK: Add the Youtube Search API Base URL here:
 // Documentation is here: https://developers.google.com/youtube/v3/docs/search/list#usage
-const BASE_URL = '';
+const BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
 
 // TASK:
 // 1. Create a `fetchVideos` function that receives a `searchTerm` and `callback`
@@ -26,7 +26,13 @@ const BASE_URL = '';
 // 3. Make a getJSON call using the query object and sending the provided callback in as the last argument
 // TEST IT! Execute this function and console log the results inside the callback.
 const fetchVideos = function(searchTerm, callback) {
-
+	const query = {
+		maxResults: 5,
+		key: AIzaSyAUo-N3cPKJEk1pEEjFn2QBNS5CKCbLcHE,
+		part: snippet,
+		q: searchTerm
+	};
+	$.getJSON(BASE_URL, query, response => callback(response) );
 };
 
 // TASK:
@@ -38,15 +44,28 @@ const fetchVideos = function(searchTerm, callback) {
 // TEST IT! Grab an example API response and send it into the function - make sure
 // you get back the object you want.
 const decorateResponse = function(response) {
-
+const responseData = response.items.map(function(item){
+ return {
+   id: item.id,
+   title: item.title,
+   thumbnail: item.thumbnail.default
+ };
 };
+return responseData;
+};	
+
 
 // TASK:
 // 1. Create a `generateVideoItemHtml` function that receives the decorated object
 // 2. Using the object, return an HTML string containing all the expected data
 // TEST IT!
-const generateVideoItemHtml = function(video) {
 
+const generate videoItemElement = function(video) {
+	return `<img src = /*video thumb*/>`;
+};
+const generate generateVideoItemHtml = function(video) {
+	 const items = video.map((item) => videoItemElement(item));
+	return items.join('');
 };
 
 // TASK:
@@ -54,7 +73,7 @@ const generateVideoItemHtml = function(video) {
 // objects and sets the array as the value held in store.videos
 // TEST IT!
 const addVideosToStore = function(videos) {
-
+	
 };
 
 // TASK:
@@ -63,7 +82,9 @@ const addVideosToStore = function(videos) {
 // 3. Add your array of DOM elements to the appropriate DOM element
 // TEST IT!
 const render = function() {
-
+    const QueryItemsString = generateVideoItemHtml(items);
+  
+    $('.results').html(QueryItemString);
 };
 
 // TASK:
@@ -78,11 +99,20 @@ const render = function() {
 //   g) Inside the callback, run the `render` function 
 // TEST IT!
 const handleFormSubmit = function() {
-
+	$('#search-term').submit(function(event) {
+		event.preventDefault();
+		const queryTerm = $('#search-term').val();
+		$('#search-term').val('');
+		fetchVideos(queryTerm, response => {
+			const x = decorateResponse(response);
+			addVideosToStore(x);
+			render();
+		});
+	});
 };
 
 // When DOM is ready:
-$(function () {
-  // TASK:
-  // 1. Run `handleFormSubmit` to bind the event listener to the DOM
+$(functioun () {
+	handleFormSubmit();
+// TASK:
 });
